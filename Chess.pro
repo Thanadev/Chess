@@ -24,9 +24,12 @@ SOURCES += main.cpp\
     Tests/pawntest.cpp \
     Persistents/chesstab.cpp \
     Persistents/chesscell.cpp \
-    Tests/chesstabtest.cpp
+    Tests/chesstabtest.cpp \
+    Persistents/Pieces/kingentity.cpp \
+    Persistents/MovePatterns/kingpattern.cpp \
+    Tests/kingtest.cpp
 
-HEADERS  += mainview.h \
+HEADERS  += \
     Persistents/Pieces/pieceentity.h \
     Persistents/Utils/position.h \
     Tests/chesstester.h \
@@ -37,4 +40,7 @@ HEADERS  += mainview.h \
     Tests/pawntest.h \
     Persistents/chesstab.h \
     Persistents/chesscell.h \
-    Tests/chesstabtest.h
+    Tests/chesstabtest.h \
+    Persistents/Pieces/kingentity.h \
+    Persistents/MovePatterns/kingpattern.h \
+    Tests/kingtest.h

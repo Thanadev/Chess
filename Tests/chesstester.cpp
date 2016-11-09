@@ -7,6 +7,7 @@ ChessTester::ChessTester()
     tests = new QList<BaseTest *>();
     tests->append(new PawnTest());
     tests->append(new ChesstabTest());
+    tests->append(new KingTest());
 }
 
 ChessTester::~ChessTester()

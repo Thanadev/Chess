@@ -9,6 +9,7 @@
 #include "basetest.h"
 #include "pawntest.h"
 #include "chesstabtest.h"
+#include "kingtest.h"
 
 /**
  * @brief Main class executing the tests

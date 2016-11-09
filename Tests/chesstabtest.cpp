@@ -7,7 +7,7 @@ ChesstabTest::ChesstabTest()
 
 ChesstabTest::~ChesstabTest()
 {
-
+    delete chesstab;
 }
 
 void ChesstabTest::runTests()
@@ -19,6 +19,7 @@ void ChesstabTest::runTests()
     Q_ASSERT_X(selectOccupatedCellTest(), "selectOccupatedCellTest", "");
     Q_ASSERT_X(movePieceToEmptyValidLocationTest(), "movePieceToEmptyValidLocationTest", "");
     Q_ASSERT_X(movePieceToNotEmptyNotValidLocationTest(), "movePieceToNotEmptyNotValidLocationTest", "");
+    Q_ASSERT_X(movePieceToNotEmptyEnemyLocationTest(), "movePieceToNotEmptyEnemyLocationTest", "");
 }
 
 bool ChesstabTest::createChessTabTest()
@@ -106,7 +107,7 @@ bool ChesstabTest::movePieceToNotEmptyNotValidLocationTest()
     bool isValid = false;
 
     // DEBUG
-    for (int y = 0; y < 8; y++) {
+    /*for (int y = 0; y < 8; y++) {
         QString s = "";
         for (int x = 0; x < 8; x++) {
             if (chesstab->getCellAt(x, y)->getCurrentPiece() != NULL) {
@@ -117,19 +118,45 @@ bool ChesstabTest::movePieceToNotEmptyNotValidLocationTest()
         }
 
         qDebug() << s;
-    }
+    }*/
 
     // Select an occupated cell and tell the new selected cell to get the piece
     chesstab->resetSelectedCell();
     ChessCell *originCell = chesstab->selectCell(1,0);
-    qDebug() << (originCell->getCurrentPiece() != NULL);
-    qDebug() << (chesstab->getCellAt(1,1)->getCurrentPiece() != NULL);
     ChessCell *destinationCell = chesstab->selectCell(1,1);
 
     // Check if the position of the piece have NOT changed, if the two cells have NOT exchanged content
     if (originCell != NULL && destinationCell != NULL &&
             originCell->getCurrentPiece() != NULL && destinationCell->getCurrentPiece() != NULL &&
             originCell->getCurrentPiece()->getPosition() == originCell->getPosition()) {
+        isValid = true;
+    }
+
+    chesstab->resetTab();
+
+    return isValid;
+}
+
+bool ChesstabTest::movePieceToNotEmptyEnemyLocationTest()
+{
+    bool isValid = false;
+
+    // Select an occupated cell and make it move to an enemy
+    chesstab->resetSelectedCell();
+    ChessCell *originCell = chesstab->selectCell(0,1);
+    ChessCell *destinationCell = NULL;
+    PieceEntity *enemy = chesstab->getCellAt(0, 6)->getCurrentPiece();
+
+    for (int y = 2; y < 7; y++) {
+        destinationCell = chesstab->selectCell(0,y);
+    }
+
+    // Check if the destination cell contains our piece, and the enemy piece is marked as removed
+    if (originCell != NULL && destinationCell != NULL &&
+            originCell->getCurrentPiece() == NULL && destinationCell->getCurrentPiece() != NULL &&
+            destinationCell->getCurrentPiece()->getIsWhite() == true &&
+            destinationCell->getPosition().y == 6 &&
+            chesstab->getRemovedPieces()->contains(enemy)) {
         isValid = true;
     }
 

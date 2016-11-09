@@ -3,6 +3,8 @@
 ChessTab::ChessTab()
 {
     selectedCell = NULL;
+    removedPieces = new QList<PieceEntity *>();
+
     createTab();
     populateTab();
 }
@@ -10,6 +12,7 @@ ChessTab::ChessTab()
 ChessTab::~ChessTab()
 {
     delete[] cells;
+    delete removedPieces;
 }
 
 /**
@@ -29,41 +32,39 @@ void ChessTab::createTab()
  */
 void ChessTab::populateTab()
 {
-    Position pos;
-    pos.x = 0;
-    pos.y = 0;
+    bool isWhite = true;
 
     for (int y = 0; y < 8; y++) {
         for (int x = 0; x < 8; x++) {
             if (y < 2 || y >= 6) {
-                pos.x = x;
-                pos.y = y;
+
+                isWhite = (y < 2);
 
                 switch (x) {
                 default:
                 case 0:
-                    cells[y*8+x]->setPiece(new PawnEntity(pos, true));
+                    cells[y*8+x]->setPiece(new PawnEntity(Position(x, y), isWhite));
                     break;
                 case 1:
-                    cells[y*8+x]->setPiece(new PawnEntity(pos, true));
+                    cells[y*8+x]->setPiece(new PawnEntity(Position(x, y), isWhite));
                     break;
                 case 2:
-                    cells[y*8+x]->setPiece(new PawnEntity(pos, true));
+                    cells[y*8+x]->setPiece(new PawnEntity(Position(x, y), isWhite));
                     break;
                 case 3:
-                    cells[y*8+x]->setPiece(new PawnEntity(pos, true));
+                    cells[y*8+x]->setPiece(new PawnEntity(Position(x, y), isWhite));
                     break;
                 case 4:
-                    cells[y*8+x]->setPiece(new PawnEntity(pos, true));
+                    cells[y*8+x]->setPiece(new PawnEntity(Position(x, y), isWhite));
                     break;
                 case 5:
-                    cells[y*8+x]->setPiece(new PawnEntity(pos, true));
+                    cells[y*8+x]->setPiece(new PawnEntity(Position(x, y), isWhite));
                     break;
                 case 6:
-                    cells[y*8+x]->setPiece(new PawnEntity(pos, true));
+                    cells[y*8+x]->setPiece(new PawnEntity(Position(x, y), isWhite));
                     break;
                 case 7:
-                    cells[y*8+x]->setPiece(new PawnEntity(pos, true));
+                    cells[y*8+x]->setPiece(new PawnEntity(Position(x, y), isWhite));
                     break;
                 }
             }
@@ -108,6 +109,11 @@ void ChessTab::movePieceFromSelectedCell(ChessCell *destination)
     if (selectedCell != NULL && selectedCell->getCurrentPiece() != NULL) {
         if (selectedCell->getCurrentPiece()->move(destination->getPosition(), destination->getCurrentPiece())) {
             // Actualize cells piece
+            if (destination->getCurrentPiece() != NULL && destination->getCurrentPiece()->getIsWhite() != selectedCell->getCurrentPiece()->getIsWhite()) {
+                qDebug() << "Enemy killed";
+                removedPieces->append(destination->getCurrentPiece());
+            }
+
             destination->setPiece(selectedCell->getCurrentPiece());
             selectedCell->setPiece(NULL);
         }
@@ -161,5 +167,12 @@ void ChessTab::resetTab()
         cells[i]->setPiece(NULL);
     }
 
+    removedPieces->clear();
+
     populateTab();
+}
+
+QList<PieceEntity *>* ChessTab::getRemovedPieces()
+{
+    return removedPieces;
 }

@@ -19,6 +19,7 @@ public:
     ChessCell* getCurrentSelectedCell();
     void resetSelectedCell();
     void resetTab();
+    QList<PieceEntity *>* getRemovedPieces();
 
 protected:
     void createTab();
@@ -27,6 +28,7 @@ protected:
 
     ChessCell *cells[64];
     ChessCell *selectedCell;
+    QList<PieceEntity *> *removedPieces;
 };
 
 #endif // CHESSTAB_H

@@ -10,9 +10,6 @@ public:
     PawnEntity(Position position, bool isWhite);
     ~PawnEntity();
     PawnPattern* getPattern();
-    virtual bool move(Position position, PieceEntity *occupant);
-protected:
-    PawnPattern *pattern;
 };
 
 #endif // PAWNENTITY_H

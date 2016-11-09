@@ -10,8 +10,9 @@ class BasePattern
 public:
     BasePattern(bool headedUp);
     ~BasePattern();
-    virtual bool checkPattern(Position start, Position end) = 0;
+    virtual bool checkPattern(Position start, Position end);
 protected:
+    int getDirection();
     bool headedUp;
 };
 

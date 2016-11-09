@@ -18,13 +18,7 @@ PawnPattern::~PawnPattern()
 bool PawnPattern::checkPattern(Position start, Position end)
 {
     bool isValid = false;
-    int direction = 0;
-
-    if (headedUp) {
-        direction = 1;
-    } else {
-        direction = -1;
-    }
+    int direction = getDirection();
 
     if (((end.y - start.y) == (1 * direction)) && (end.x - start.x) == 0) {
         isValid = true;

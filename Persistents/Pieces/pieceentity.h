@@ -14,9 +14,10 @@ public:
     ~PieceEntity();
     Position getPosition();
     bool getIsWhite();
-    virtual bool move(Position position, PieceEntity *occupant) = 0;
+    virtual bool move(Position position, PieceEntity *occupant);
 
 protected:
+    BasePattern *pattern;
     Position position;
     bool isWhite;
 };
