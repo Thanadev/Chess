@@ -10,7 +10,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = Chess
 TEMPLATE = app
-CONFIG += console debug
+CONFIG += debug
 
 
 SOURCES += main.cpp\
@@ -23,7 +23,8 @@ SOURCES += main.cpp\
     Persistents/MovePatterns/pawnpattern.cpp \
     Tests/pawntest.cpp \
     Persistents/chesstab.cpp \
-    Persistents/chesscell.cpp
+    Persistents/chesscell.cpp \
+    Tests/chesstabtest.cpp
 
 HEADERS  += mainview.h \
     Persistents/Pieces/pieceentity.h \
@@ -35,4 +36,5 @@ HEADERS  += mainview.h \
     Persistents/MovePatterns/pawnpattern.h \
     Tests/pawntest.h \
     Persistents/chesstab.h \
-    Persistents/chesscell.h
+    Persistents/chesscell.h \
+    Tests/chesstabtest.h
