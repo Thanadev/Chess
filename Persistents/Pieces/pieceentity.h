@@ -14,7 +14,7 @@ public:
     ~PieceEntity();
     Position getPosition();
     bool getIsWhite();
-    virtual bool move(Position position) = 0;
+    virtual bool move(Position position, PieceEntity *occupant) = 0;
 
 protected:
     Position position;

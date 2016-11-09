@@ -15,6 +15,8 @@ private:
     bool populateChessTabTest();
     bool selectEmptyCellTest();
     bool selectOccupatedCellTest();
+    bool movePieceToEmptyValidLocationTest();
+    bool movePieceToNotEmptyNotValidLocationTest();
 
     ChessTab *chesstab;
 };

@@ -17,6 +17,8 @@ void ChesstabTest::runTests()
     Q_ASSERT_X(populateChessTabTest(), "populateChessTab", "");
     Q_ASSERT_X(selectEmptyCellTest(), "selectEmptyCellTest", "");
     Q_ASSERT_X(selectOccupatedCellTest(), "selectOccupatedCellTest", "");
+    Q_ASSERT_X(movePieceToEmptyValidLocationTest(), "movePieceToEmptyValidLocationTest", "");
+    Q_ASSERT_X(movePieceToNotEmptyNotValidLocationTest(), "movePieceToNotEmptyNotValidLocationTest", "");
 }
 
 bool ChesstabTest::createChessTabTest()
@@ -57,7 +59,7 @@ bool ChesstabTest::selectEmptyCellTest()
     bool isValid = false;
 
     // Try to select a cell at an arbitrary empty cell and check : its position, currentSelectedCell attribute
-    ChessCell *cell = chesstab->selectCell(4, 4);
+    ChessCell *cell = chesstab->selectCell(4,4);
     if (cell->getCurrentPiece() == NULL && cell->getPosition() == Position(4,4) && chesstab->getCurrentSelectedCell() != NULL) {
         isValid = true;
     }
@@ -70,11 +72,68 @@ bool ChesstabTest::selectOccupatedCellTest()
     bool isValid = false;
 
     // Try to select a cell at an arbitrary occupated cell and check : its position, currentSelectedCell attribute, occupant
-    ChessCell *cell = chesstab->selectCell(5, 1);
-    qDebug() << (cell->getCurrentPiece() != NULL);
+    ChessCell *cell = chesstab->selectCell(5,1);
     if (cell->getCurrentPiece() != NULL && cell->getPosition() == Position(5, 1) && chesstab->getCurrentSelectedCell() != NULL) {
         isValid = true;
     }
+
+    return isValid;
+}
+
+bool ChesstabTest::movePieceToEmptyValidLocationTest()
+{
+    bool isValid = false;
+
+    // Select an occupated cell and tell the new selected cell to get the piece
+    chesstab->resetSelectedCell();
+    ChessCell *originCell = chesstab->selectCell(1,1);
+    ChessCell *destinationCell = chesstab->selectCell(1,2);
+
+    // Check if the position of the piece have changed, if the two cells have exchanged content
+    if (originCell != NULL && destinationCell != NULL &&
+            originCell->getCurrentPiece() == NULL && destinationCell->getCurrentPiece() != NULL &&
+            destinationCell->getCurrentPiece()->getPosition() == destinationCell->getPosition()) {
+        isValid = true;
+    }
+
+    chesstab->resetTab();
+
+    return isValid;
+}
+
+bool ChesstabTest::movePieceToNotEmptyNotValidLocationTest()
+{
+    bool isValid = false;
+
+    // DEBUG
+    for (int y = 0; y < 8; y++) {
+        QString s = "";
+        for (int x = 0; x < 8; x++) {
+            if (chesstab->getCellAt(x, y)->getCurrentPiece() != NULL) {
+                s += "1 ";
+            } else {
+                s += "0 ";
+            }
+        }
+
+        qDebug() << s;
+    }
+
+    // Select an occupated cell and tell the new selected cell to get the piece
+    chesstab->resetSelectedCell();
+    ChessCell *originCell = chesstab->selectCell(1,0);
+    qDebug() << (originCell->getCurrentPiece() != NULL);
+    qDebug() << (chesstab->getCellAt(1,1)->getCurrentPiece() != NULL);
+    ChessCell *destinationCell = chesstab->selectCell(1,1);
+
+    // Check if the position of the piece have NOT changed, if the two cells have NOT exchanged content
+    if (originCell != NULL && destinationCell != NULL &&
+            originCell->getCurrentPiece() != NULL && destinationCell->getCurrentPiece() != NULL &&
+            originCell->getCurrentPiece()->getPosition() == originCell->getPosition()) {
+        isValid = true;
+    }
+
+    chesstab->resetTab();
 
     return isValid;
 }

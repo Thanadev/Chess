@@ -2,6 +2,7 @@
 
 ChessTab::ChessTab()
 {
+    selectedCell = NULL;
     createTab();
     populateTab();
 }
@@ -24,7 +25,7 @@ void ChessTab::createTab()
 }
 
 /**
- * @brief Assign cells to
+ * @brief Assign pieces to cells
  */
 void ChessTab::populateTab()
 {
@@ -70,31 +71,95 @@ void ChessTab::populateTab()
     }
 }
 
+/**
+ * @brief ChessTab::selectCell
+ * @param cellPos
+ * @return
+ */
 ChessCell* ChessTab::selectCell(Position cellPos)
 {
-    selectedCell = getCellAt(cellPos);
+    selectedCell = selectCell(cellPos.x, cellPos.y);
 
     return selectedCell;
 }
 
+/**
+ * @brief ChessTab::selectCell
+ * @param x
+ * @param y
+ * @return
+ */
 ChessCell* ChessTab::selectCell(int x, int y)
 {
-    selectedCell = getCellAt(x, y);
+    ChessCell* destination = getCellAt(x, y);
+    movePieceFromSelectedCell(destination);
+
+    selectedCell = destination;
 
     return selectedCell;
 }
 
-ChessCell* ChessTab::getCellAt(Position pos)
+/**
+ * @brief ChessTab::movePieceFromSelectedCell
+ * @param destination
+ */
+void ChessTab::movePieceFromSelectedCell(ChessCell *destination)
 {
-    return cells[pos.y*8 + pos.x];
+    if (selectedCell != NULL && selectedCell->getCurrentPiece() != NULL) {
+        if (selectedCell->getCurrentPiece()->move(destination->getPosition(), destination->getCurrentPiece())) {
+            // Actualize cells piece
+            destination->setPiece(selectedCell->getCurrentPiece());
+            selectedCell->setPiece(NULL);
+        }
+    }
 }
 
+/**
+ * @brief ChessTab::getCellAt
+ * @param pos
+ * @return
+ */
+ChessCell* ChessTab::getCellAt(Position pos)
+{
+    return getCellAt(pos.x, pos.y);
+}
+
+/**
+ * @brief ChessTab::getCellAt
+ * @param x
+ * @param y
+ * @return
+ */
 ChessCell* ChessTab::getCellAt(int x, int y)
 {
     return cells[y*8 + x];
 }
 
+/**
+ * @brief ChessTab::getCurrentSelectedCell
+ * @return
+ */
 ChessCell* ChessTab::getCurrentSelectedCell()
 {
     return selectedCell;
+}
+
+/**
+ * @brief ChessTab::resetSelectedCell
+ */
+void ChessTab::resetSelectedCell()
+{
+    selectedCell = NULL;
+}
+
+/**
+ * @brief ChessTab::resetTab
+ */
+void ChessTab::resetTab()
+{
+    for (int i = 0; i < 64; i++) {
+        cells[i]->setPiece(NULL);
+    }
+
+    populateTab();
 }

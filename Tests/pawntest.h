@@ -14,8 +14,6 @@ public:
 private:
     bool patternValidForwardTest();
     bool patternNonValidBackwardTest();
-    bool pawnValidMoveTest();
-    bool pawnNonValidMoveTest();
 
     PawnEntity *pawn;
 };

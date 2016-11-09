@@ -11,9 +11,17 @@ PawnEntity::~PawnEntity()
     delete pattern;
 }
 
-bool PawnEntity::move(Position position)
+bool PawnEntity::move(Position position, PieceEntity *occupant)
 {
     bool isValid = pattern->checkPattern(this->position, position);
+
+    if (occupant != NULL) {
+        if (occupant->getIsWhite() != this->isWhite) {
+            // TODO implements piece death
+        } else {
+            isValid = false;
+        }
+    }
 
     if (isValid) {
         this->position = position;
