@@ -1,12 +1,17 @@
 #include "chesstab.h"
 
-ChessTab::ChessTab()
+ChessTab* ChessTab::latestInstance = NULL;
+
+ChessTab::ChessTab(bool createAndPopulate)
 {
     selectedCell = NULL;
     removedPieces = new QList<PieceEntity *>();
+    latestInstance = this;
 
-    createTab();
-    populateTab();
+    if (createAndPopulate) {
+        createTab();
+        populateTab();
+    }
 }
 
 ChessTab::~ChessTab()
@@ -47,10 +52,10 @@ void ChessTab::populateTab()
                         cells[y*8+x]->setPiece(new PawnEntity(Position(x, y), isWhite));
                         break;
                     case 1:
-                        cells[y*8+x]->setPiece(new PawnEntity(Position(x, y), isWhite));
+                        cells[y*8+x]->setPiece(new KnightEntity(Position(x, y), isWhite));
                         break;
                     case 2:
-                        cells[y*8+x]->setPiece(new PawnEntity(Position(x, y), isWhite));
+                        cells[y*8+x]->setPiece(new BishopEntity(Position(x, y), isWhite));
                         break;
                     case 3:
                         cells[y*8+x]->setPiece(new KingEntity(Position(x, y), isWhite));
@@ -59,10 +64,10 @@ void ChessTab::populateTab()
                         cells[y*8+x]->setPiece(new PawnEntity(Position(x, y), isWhite));
                         break;
                     case 5:
-                        cells[y*8+x]->setPiece(new PawnEntity(Position(x, y), isWhite));
+                        cells[y*8+x]->setPiece(new BishopEntity(Position(x, y), isWhite));
                         break;
                     case 6:
-                        cells[y*8+x]->setPiece(new PawnEntity(Position(x, y), isWhite));
+                        cells[y*8+x]->setPiece(new KnightEntity(Position(x, y), isWhite));
                         break;
                     case 7:
                         cells[y*8+x]->setPiece(new PawnEntity(Position(x, y), isWhite));
@@ -111,15 +116,22 @@ ChessCell* ChessTab::selectCell(int x, int y)
 void ChessTab::movePieceFromSelectedCell(ChessCell *destination)
 {
     if (selectedCell != NULL && selectedCell->getCurrentPiece() != NULL) {
-        if (selectedCell->getCurrentPiece()->move(destination->getPosition(), destination->getCurrentPiece())) {
-            // Actualize cells piece
-            if (destination->getCurrentPiece() != NULL && destination->getCurrentPiece()->getIsWhite() != selectedCell->getCurrentPiece()->getIsWhite()) {
-                qDebug() << "Enemy killed";
-                removedPieces->append(destination->getCurrentPiece());
-            }
 
-            destination->setPiece(selectedCell->getCurrentPiece());
-            selectedCell->setPiece(NULL);
+        if (selectedCell->getCurrentPiece()->move(destination->getPosition(), destination->getCurrentPiece())) {
+
+            if (!isSomeoneInWay(selectedCell->getPosition(), destination->getPosition()) ||
+                    !hasToCheckSomeoneInWay(selectedCell->getCurrentPiece())) {
+                // Actualize cells piece
+                if (destination->getCurrentPiece() != NULL && destination->getCurrentPiece()->getIsWhite() != selectedCell->getCurrentPiece()->getIsWhite()) {
+                    qDebug() << "Enemy killed";
+                    removedPieces->append(destination->getCurrentPiece());
+                }
+
+                destination->setPiece(selectedCell->getCurrentPiece());
+                selectedCell->setPiece(NULL);
+            } else {
+                selectedCell->getCurrentPiece()->setPosition(selectedCell->getPosition());
+            }
         }
     }
 }
@@ -176,7 +188,62 @@ void ChessTab::resetTab()
     populateTab();
 }
 
+bool ChessTab::isSomeoneInWay(Position start, Position end)
+{
+    bool inWay = false;
+
+    Position direction;
+    if (end.x - start.x > 0) {
+        direction.x = 1;
+    } else {
+        direction.x = -1;
+    }
+
+    if (end.y - start.y > 0) {
+        direction.y = 1;
+    } else {
+        direction.y = -1;
+    }
+
+    int x = start.x, y = start.y;
+    int secureCount = 0;
+
+    while (secureCount < 500 && x != end.x - direction.x && y != end.y - direction.y) {
+        secureCount++;
+        x += direction.x;
+        y += direction.y;
+
+        if (getCellAt(x, y)->getCurrentPiece() != NULL) {
+            inWay = true;
+            break;
+        } else if (secureCount > 498) {
+            qDebug() << "SECURE COUNT IS EXPLODING, take care to the infinite loop";
+            break;
+        }
+    }
+
+    return inWay;
+}
+
 QList<PieceEntity *>* ChessTab::getRemovedPieces()
 {
     return removedPieces;
+}
+
+ChessTab* ChessTab::getLatestInstance()
+{
+    return latestInstance;
+}
+
+bool ChessTab::hasToCheckSomeoneInWay(PieceEntity *piece)
+{
+    bool check = true;
+
+    KnightEntity *knight = dynamic_cast<KnightEntity *>(piece);
+
+    if (knight != NULL) {
+        check = false;
+    }
+
+    return check;
 }

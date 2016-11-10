@@ -44,3 +44,8 @@ bool PieceEntity::move(Position position, PieceEntity *occupant)
 
     return isValid;
 }
+
+void PieceEntity::setPosition(Position pos)
+{
+    position = pos;
+}

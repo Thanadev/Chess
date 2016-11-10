@@ -32,6 +32,12 @@ SOURCES += main.cpp\
     Views/cellview.cpp \
     Controllers/tabcontroller.cpp \
     Controllers/maincontroller.cpp \
+    Persistents/Pieces/bishopentity.cpp \
+    Persistents/MovePatterns/bishoppattern.cpp \
+    Tests/bishoptest.cpp \
+    Persistents/Pieces/knightentity.cpp \
+    Persistents/MovePatterns/knightpattern.cpp \
+    Tests/knighttest.cpp
 
 HEADERS  += \
     Persistents/Pieces/pieceentity.h \
@@ -53,7 +59,13 @@ HEADERS  += \
     Views/mainwindow.h \
     Views/cellview.h \
     Controllers/tabcontroller.h \
-    Controllers/maincontroller.h
+    Controllers/maincontroller.h \
+    Persistents/Pieces/bishopentity.h \
+    Persistents/MovePatterns/bishoppattern.h \
+    Tests/bishoptest.h \
+    Persistents/Pieces/knightentity.h \
+    Persistents/MovePatterns/knightpattern.h \
+    Tests/knighttest.h
 
 DISTFILES += \
     Resources/icons/bishop-black.png \

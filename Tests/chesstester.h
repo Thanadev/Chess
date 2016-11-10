@@ -10,6 +10,8 @@
 #include "pawntest.h"
 #include "chesstabtest.h"
 #include "kingtest.h"
+#include "bishoptest.h"
+#include "knighttest.h"
 
 /**
  * @brief Main class executing the tests

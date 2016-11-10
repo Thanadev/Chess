@@ -18,6 +18,7 @@ public:
     Position getPosition();
     bool getIsWhite();
     QIcon getIcon();
+    void setPosition(Position pos);
     virtual bool move(Position position, PieceEntity *occupant);
 
 protected:

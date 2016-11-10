@@ -8,6 +8,8 @@ ChessTester::ChessTester()
     tests->append(new PawnTest());
     tests->append(new ChesstabTest());
     tests->append(new KingTest());
+    tests->append(new BishopTest());
+    tests->append(new KnightTest());
 }
 
 ChessTester::~ChessTester()
