@@ -37,7 +37,13 @@ SOURCES += main.cpp\
     Tests/bishoptest.cpp \
     Persistents/Pieces/knightentity.cpp \
     Persistents/MovePatterns/knightpattern.cpp \
-    Tests/knighttest.cpp
+    Tests/knighttest.cpp \
+    Persistents/Pieces/rookentity.cpp \
+    Persistents/MovePatterns/rookpattern.cpp \
+    Tests/rooktest.cpp \
+    Persistents/MovePatterns/queenpattern.cpp \
+    Persistents/Pieces/queenentity.cpp \
+    Tests/queentest.cpp
 
 HEADERS  += \
     Persistents/Pieces/pieceentity.h \
@@ -65,7 +71,13 @@ HEADERS  += \
     Tests/bishoptest.h \
     Persistents/Pieces/knightentity.h \
     Persistents/MovePatterns/knightpattern.h \
-    Tests/knighttest.h
+    Tests/knighttest.h \
+    Persistents/Pieces/rookentity.h \
+    Persistents/MovePatterns/rookpattern.h \
+    Tests/rooktest.h \
+    Persistents/MovePatterns/queenpattern.h \
+    Persistents/Pieces/queenentity.h \
+    Tests/queentest.h
 
 DISTFILES += \
     Resources/icons/bishop-black.png \

@@ -49,7 +49,7 @@ void ChessTab::populateTab()
                     switch (x) {
                     default:
                     case 0:
-                        cells[y*8+x]->setPiece(new PawnEntity(Position(x, y), isWhite));
+                        cells[y*8+x]->setPiece(new RookEntity(Position(x, y), isWhite));
                         break;
                     case 1:
                         cells[y*8+x]->setPiece(new KnightEntity(Position(x, y), isWhite));
@@ -61,7 +61,7 @@ void ChessTab::populateTab()
                         cells[y*8+x]->setPiece(new KingEntity(Position(x, y), isWhite));
                         break;
                     case 4:
-                        cells[y*8+x]->setPiece(new PawnEntity(Position(x, y), isWhite));
+                        cells[y*8+x]->setPiece(new QueenEntity(Position(x, y), isWhite));
                         break;
                     case 5:
                         cells[y*8+x]->setPiece(new BishopEntity(Position(x, y), isWhite));
@@ -70,7 +70,7 @@ void ChessTab::populateTab()
                         cells[y*8+x]->setPiece(new KnightEntity(Position(x, y), isWhite));
                         break;
                     case 7:
-                        cells[y*8+x]->setPiece(new PawnEntity(Position(x, y), isWhite));
+                        cells[y*8+x]->setPiece(new RookEntity(Position(x, y), isWhite));
                         break;
                     }
                 } else {
@@ -210,10 +210,17 @@ bool ChessTab::isSomeoneInWay(Position start, Position end)
 
     while (secureCount < 500 && x != end.x - direction.x && y != end.y - direction.y) {
         secureCount++;
-        x += direction.x;
-        y += direction.y;
+
+        if (x != end.x) {
+            x += direction.x;
+        }
+
+        if (y != end.y) {
+            y += direction.y;
+        }
 
         if (getCellAt(x, y)->getCurrentPiece() != NULL) {
+            qDebug() << "Something is on the way";
             inWay = true;
             break;
         } else if (secureCount > 498) {

@@ -8,6 +8,8 @@
 #include "Pieces/kingentity.h"
 #include "Pieces/knightentity.h"
 #include "Pieces/bishopentity.h"
+#include "Pieces/rookentity.h"
+#include "Pieces/queenentity.h"
 #include "chesscell.h"
 
 class ChessTab

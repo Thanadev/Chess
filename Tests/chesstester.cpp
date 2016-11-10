@@ -10,6 +10,8 @@ ChessTester::ChessTester()
     tests->append(new KingTest());
     tests->append(new BishopTest());
     tests->append(new KnightTest());
+    tests->append(new RookTest());
+    tests->append(new QueenTest());
 }
 
 ChessTester::~ChessTester()

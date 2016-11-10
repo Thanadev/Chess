@@ -11,7 +11,7 @@ KnightPattern::~KnightPattern()
 }
 
 /**
- * @brief A bishop can move on diagonals
+ * @brief A knight can move drawing "L" (one horizontally and two vertically or inverse)
  * @param start
  * @param end
  * @return true if the pattern is valid
