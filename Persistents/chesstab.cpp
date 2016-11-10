@@ -125,7 +125,7 @@ void ChessTab::movePieceFromSelectedCell(ChessCell *destination)
  * @param pos
  * @return
  */
-ChessCell* ChessTab::getCellAt(Position pos)
+ChessCell* ChessTab::getCellAt(Position pos) const
 {
     return getCellAt(pos.x, pos.y);
 }
@@ -136,7 +136,7 @@ ChessCell* ChessTab::getCellAt(Position pos)
  * @param y
  * @return
  */
-ChessCell* ChessTab::getCellAt(int x, int y)
+ChessCell* ChessTab::getCellAt(int x, int y) const
 {
     return cells[y*8 + x];
 }

@@ -1,6 +1,6 @@
 #ifndef PAWNENTITY_H
 #define PAWNENTITY_H
-
+#include <QPushButton>
 #include "pieceentity.h"
 #include "../MovePatterns/pawnpattern.h"
 

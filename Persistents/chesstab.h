@@ -12,8 +12,8 @@ class ChessTab
 public:
     ChessTab();
     ~ChessTab();
-    ChessCell* getCellAt(int x, int y);
-    ChessCell* getCellAt(Position pos);
+    ChessCell* getCellAt(int x, int y) const;
+    ChessCell* getCellAt(Position pos) const;
     ChessCell* selectCell(Position cellPos);
     ChessCell* selectCell(int x, int y);
     ChessCell* getCurrentSelectedCell();

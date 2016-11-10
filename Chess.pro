@@ -14,7 +14,6 @@ CONFIG += debug
 
 
 SOURCES += main.cpp\
-        mainview.cpp \
     Persistents/Pieces/pieceentity.cpp \
     Tests/chesstester.cpp \
     Tests/basetest.cpp \
@@ -27,7 +26,12 @@ SOURCES += main.cpp\
     Tests/chesstabtest.cpp \
     Persistents/Pieces/kingentity.cpp \
     Persistents/MovePatterns/kingpattern.cpp \
-    Tests/kingtest.cpp
+    Tests/kingtest.cpp \
+    Views/tabview.cpp \
+    Views/mainwindow.cpp \
+    Views/cellview.cpp \
+    Controllers/tabcontroller.cpp \
+    Controllers/maincontroller.cpp \
 
 HEADERS  += \
     Persistents/Pieces/pieceentity.h \
@@ -43,4 +47,24 @@ HEADERS  += \
     Tests/chesstabtest.h \
     Persistents/Pieces/kingentity.h \
     Persistents/MovePatterns/kingpattern.h \
-    Tests/kingtest.h
+    Tests/kingtest.h \
+    Persistents/tabview.h \
+    Views/tabview.h \
+    Views/mainwindow.h \
+    Views/cellview.h \
+    Controllers/tabcontroller.h \
+    Controllers/maincontroller.h
+
+DISTFILES += \
+    Resources/icons/bishop-black.png \
+    Resources/icons/bishop-white.png \
+    Resources/icons/king-black.png \
+    Resources/icons/king-white.png \
+    Resources/icons/knight-black.png \
+    Resources/icons/knight-white.png \
+    Resources/icons/pawn-black.png \
+    Resources/icons/pawn-white.png \
+    Resources/icons/queen-black.png \
+    Resources/icons/queen-white.png \
+    Resources/icons/rok-black.png \
+    Resources/icons/rok-white.png

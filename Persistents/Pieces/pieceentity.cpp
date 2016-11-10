@@ -5,6 +5,7 @@ PieceEntity::PieceEntity(Position position, bool isWhite)
     this->position = position;
     this->isWhite = isWhite;
     pattern = new BasePattern(isWhite);
+    iconPath = QCoreApplication::applicationDirPath() + "/Resources/icons/";
 }
 
 PieceEntity::~PieceEntity()
@@ -20,6 +21,11 @@ bool PieceEntity::getIsWhite()
 Position PieceEntity::getPosition()
 {
     return position;
+}
+
+QIcon PieceEntity::getIcon()
+{
+    return icon;
 }
 
 bool PieceEntity::move(Position position, PieceEntity *occupant)
