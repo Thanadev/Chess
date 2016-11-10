@@ -5,6 +5,7 @@
 #include <QDebug>
 #include "Pieces/pieceentity.h"
 #include "Pieces/pawnentity.h"
+#include "Pieces/kingentity.h"
 #include "chesscell.h"
 
 class ChessTab

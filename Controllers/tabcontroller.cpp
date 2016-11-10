@@ -16,6 +16,7 @@ TabController::~TabController()
     delete tabView;
 }
 
+
 void TabController::cellSelectedHandler(Position pos)
 {
     model->selectCell(pos);

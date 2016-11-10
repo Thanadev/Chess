@@ -40,32 +40,36 @@ void ChessTab::populateTab()
 
                 isWhite = (y < 2);
 
-                switch (x) {
-                default:
-                case 0:
+                if (y == 0 || y == 7) {
+                    switch (x) {
+                    default:
+                    case 0:
+                        cells[y*8+x]->setPiece(new PawnEntity(Position(x, y), isWhite));
+                        break;
+                    case 1:
+                        cells[y*8+x]->setPiece(new PawnEntity(Position(x, y), isWhite));
+                        break;
+                    case 2:
+                        cells[y*8+x]->setPiece(new PawnEntity(Position(x, y), isWhite));
+                        break;
+                    case 3:
+                        cells[y*8+x]->setPiece(new KingEntity(Position(x, y), isWhite));
+                        break;
+                    case 4:
+                        cells[y*8+x]->setPiece(new PawnEntity(Position(x, y), isWhite));
+                        break;
+                    case 5:
+                        cells[y*8+x]->setPiece(new PawnEntity(Position(x, y), isWhite));
+                        break;
+                    case 6:
+                        cells[y*8+x]->setPiece(new PawnEntity(Position(x, y), isWhite));
+                        break;
+                    case 7:
+                        cells[y*8+x]->setPiece(new PawnEntity(Position(x, y), isWhite));
+                        break;
+                    }
+                } else {
                     cells[y*8+x]->setPiece(new PawnEntity(Position(x, y), isWhite));
-                    break;
-                case 1:
-                    cells[y*8+x]->setPiece(new PawnEntity(Position(x, y), isWhite));
-                    break;
-                case 2:
-                    cells[y*8+x]->setPiece(new PawnEntity(Position(x, y), isWhite));
-                    break;
-                case 3:
-                    cells[y*8+x]->setPiece(new PawnEntity(Position(x, y), isWhite));
-                    break;
-                case 4:
-                    cells[y*8+x]->setPiece(new PawnEntity(Position(x, y), isWhite));
-                    break;
-                case 5:
-                    cells[y*8+x]->setPiece(new PawnEntity(Position(x, y), isWhite));
-                    break;
-                case 6:
-                    cells[y*8+x]->setPiece(new PawnEntity(Position(x, y), isWhite));
-                    break;
-                case 7:
-                    cells[y*8+x]->setPiece(new PawnEntity(Position(x, y), isWhite));
-                    break;
                 }
             }
         }
