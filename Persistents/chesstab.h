@@ -33,6 +33,7 @@ public:
 protected:
     void movePieceFromSelectedCell(ChessCell* destination);
     bool hasToCheckSomeoneInWay(PieceEntity *piece);
+    bool canEatPiece(PieceEntity *piece);
 
     static ChessTab *latestInstance;
     ChessCell *cells[64];

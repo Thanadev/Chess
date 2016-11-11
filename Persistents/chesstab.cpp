@@ -119,18 +119,30 @@ void ChessTab::movePieceFromSelectedCell(ChessCell *destination)
 
         if (selectedCell->getCurrentPiece()->move(destination->getPosition(), destination->getCurrentPiece())) {
 
+            bool validMovement = true;
+
             if (!isSomeoneInWay(selectedCell->getPosition(), destination->getPosition()) ||
                     !hasToCheckSomeoneInWay(selectedCell->getCurrentPiece())) {
+
                 // Actualize cells piece
                 if (destination->getCurrentPiece() != NULL && destination->getCurrentPiece()->getIsWhite() != selectedCell->getCurrentPiece()->getIsWhite()) {
-                    qDebug() << "Enemy killed";
-                    removedPieces->append(destination->getCurrentPiece());
-                }
 
+                    if (canEatPiece(destination->getCurrentPiece())) {
+                        qDebug() << "Enemy killed";
+                        removedPieces->append(destination->getCurrentPiece());
+                    } else {
+                        validMovement = false;
+                    }
+                }
+            } else {
+                validMovement = false;
+            }
+
+            if (validMovement) {
                 destination->setPiece(selectedCell->getCurrentPiece());
                 selectedCell->setPiece(NULL);
             } else {
-                selectedCell->getCurrentPiece()->setPosition(selectedCell->getPosition());
+                 selectedCell->getCurrentPiece()->setPosition(selectedCell->getPosition());
             }
         }
     }
@@ -253,4 +265,17 @@ bool ChessTab::hasToCheckSomeoneInWay(PieceEntity *piece)
     }
 
     return check;
+}
+
+bool ChessTab::canEatPiece(PieceEntity *piece)
+{
+    bool canEat = true;
+
+    KingEntity* king = dynamic_cast<KingEntity *>(piece);
+
+    if (king != NULL) {
+        canEat = false;
+    }
+
+    return canEat;
 }
