@@ -25,3 +25,8 @@ BishopPattern* BishopEntity::getPattern()
 {
     return dynamic_cast<BishopPattern*>(pattern);
 }
+
+QString BishopEntity::getName()
+{
+    return "bishop";
+}

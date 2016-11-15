@@ -24,3 +24,8 @@ RookPattern* RookEntity::getPattern()
 {
     return dynamic_cast<RookPattern *>(pattern);
 }
+
+QString RookEntity::getName()
+{
+    return "rook";
+}

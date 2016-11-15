@@ -4,6 +4,7 @@ TabController::TabController()
 {
     tabView = new TabView();
     model = new ChessTab();
+    whitePlayerTurn = true;
 
     QObject::connect(tabView, SIGNAL(cellClickedWithPos(Position)), this, SLOT(cellSelectedHandler(Position)));
 
@@ -19,7 +20,17 @@ TabController::~TabController()
 
 void TabController::cellSelectedHandler(Position pos)
 {
-    model->selectCell(pos);
+    ChessCell* cell = model->getCellAt(pos);
+
+    if (model->getCurrentSelectedCell() != NULL && model->getCurrentSelectedCell()->getCurrentPiece() != NULL) {
+        if (model->selectCell(pos) != NULL) {
+            qDebug() << "Cell selected";
+            whitePlayerTurn = !whitePlayerTurn;
+            model->resetSelectedCell();
+        }
+    } else if (cell != NULL && cell->getCurrentPiece() != NULL && cell->getCurrentPiece()->getIsWhite() == whitePlayerTurn) {
+        model->selectCell(pos);
+    }
 }
 
 TabView* TabController::getView()

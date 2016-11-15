@@ -24,3 +24,8 @@ PawnPattern* PawnEntity::getPattern()
 {
     return dynamic_cast<PawnPattern*>(pattern);
 }
+
+QString PawnEntity::getName()
+{
+    return "pawn";
+}

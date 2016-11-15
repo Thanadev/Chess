@@ -24,3 +24,8 @@ QueenPattern* QueenEntity::getPattern()
 {
     return dynamic_cast<QueenPattern *>(pattern);
 }
+
+QString QueenEntity::getName()
+{
+    return "queen";
+}

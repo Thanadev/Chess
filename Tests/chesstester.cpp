@@ -12,6 +12,7 @@ ChessTester::ChessTester()
     tests->append(new KnightTest());
     tests->append(new RookTest());
     tests->append(new QueenTest());
+    tests->append(new PlayerTest());
 }
 
 ChessTester::~ChessTester()

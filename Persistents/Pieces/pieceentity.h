@@ -20,6 +20,7 @@ public:
     QIcon getIcon();
     void setPosition(Position pos);
     virtual bool move(Position position, PieceEntity *occupant);
+    virtual QString getName();
 
 protected:
     BasePattern *pattern;

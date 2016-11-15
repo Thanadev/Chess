@@ -6,6 +6,8 @@ ChessTab::ChessTab(bool createAndPopulate)
 {
     selectedCell = NULL;
     removedPieces = new QList<PieceEntity *>();
+    blackPlayer = new Player(false);
+    whitePlayer = new Player(true);
     latestInstance = this;
 
     if (createAndPopulate) {
@@ -18,6 +20,8 @@ ChessTab::~ChessTab()
 {
     delete[] cells;
     delete removedPieces;
+    delete blackPlayer;
+    delete whitePlayer;
 }
 
 /**
@@ -38,6 +42,7 @@ void ChessTab::createTab()
 void ChessTab::populateTab()
 {
     bool isWhite = true;
+    PieceEntity *piece;
 
     for (int y = 0; y < 8; y++) {
         for (int x = 0; x < 8; x++) {
@@ -49,33 +54,41 @@ void ChessTab::populateTab()
                     switch (x) {
                     default:
                     case 0:
-                        cells[y*8+x]->setPiece(new RookEntity(Position(x, y), isWhite));
+                        piece = new RookEntity(Position(x, y), isWhite);
                         break;
                     case 1:
-                        cells[y*8+x]->setPiece(new KnightEntity(Position(x, y), isWhite));
+                        piece = new KnightEntity(Position(x, y), isWhite);
                         break;
                     case 2:
-                        cells[y*8+x]->setPiece(new BishopEntity(Position(x, y), isWhite));
+                        piece = new BishopEntity(Position(x, y), isWhite);
                         break;
                     case 3:
-                        cells[y*8+x]->setPiece(new KingEntity(Position(x, y), isWhite));
+                        piece = new KingEntity(Position(x, y), isWhite);
                         break;
                     case 4:
-                        cells[y*8+x]->setPiece(new QueenEntity(Position(x, y), isWhite));
+                        piece = new QueenEntity(Position(x, y), isWhite);
                         break;
                     case 5:
-                        cells[y*8+x]->setPiece(new BishopEntity(Position(x, y), isWhite));
+                        piece = new BishopEntity(Position(x, y), isWhite);
                         break;
                     case 6:
-                        cells[y*8+x]->setPiece(new KnightEntity(Position(x, y), isWhite));
+                         piece = new KnightEntity(Position(x, y), isWhite);
                         break;
                     case 7:
-                        cells[y*8+x]->setPiece(new RookEntity(Position(x, y), isWhite));
+                        piece = new RookEntity(Position(x, y), isWhite);
                         break;
                     }
                 } else {
-                    cells[y*8+x]->setPiece(new PawnEntity(Position(x, y), isWhite));
+                    piece = new PawnEntity(Position(x, y), isWhite);
                 }
+
+                if (isWhite) {
+                    whitePlayer->addPiece(piece);
+                } else {
+                    blackPlayer->addPiece(piece);
+                }
+
+                cells[y*8+x]->setPiece(piece);
             }
         }
     }
@@ -102,9 +115,12 @@ ChessCell* ChessTab::selectCell(Position cellPos)
 ChessCell* ChessTab::selectCell(int x, int y)
 {
     ChessCell* destination = getCellAt(x, y);
-    movePieceFromSelectedCell(destination);
 
-    selectedCell = destination;
+    if (selectedCell == NULL || movePieceFromSelectedCell(destination)) {
+        selectedCell = destination;
+    } else {
+        selectedCell = NULL;
+    }
 
     return selectedCell;
 }
@@ -113,22 +129,32 @@ ChessCell* ChessTab::selectCell(int x, int y)
  * @brief ChessTab::movePieceFromSelectedCell
  * @param destination
  */
-void ChessTab::movePieceFromSelectedCell(ChessCell *destination)
+bool ChessTab::movePieceFromSelectedCell(ChessCell *destination)
 {
+    bool validMovement = false;
+
     if (selectedCell != NULL && selectedCell->getCurrentPiece() != NULL) {
 
         if (selectedCell->getCurrentPiece()->move(destination->getPosition(), destination->getCurrentPiece())) {
 
-            bool validMovement = true;
-
             if (!isSomeoneInWay(selectedCell->getPosition(), destination->getPosition()) ||
                     !hasToCheckSomeoneInWay(selectedCell->getCurrentPiece())) {
 
-                // Actualize cells piece
+                validMovement = true;
+
+                // Check piece eating
                 if (destination->getCurrentPiece() != NULL && destination->getCurrentPiece()->getIsWhite() != selectedCell->getCurrentPiece()->getIsWhite()) {
+
 
                     if (canEatPiece(destination->getCurrentPiece())) {
                         qDebug() << "Enemy killed";
+
+                        if (destination->getCurrentPiece()->getIsWhite()) {
+                            whitePlayer->removePiece(destination->getCurrentPiece());
+                        } else {
+                            blackPlayer->removePiece(destination->getCurrentPiece());
+                        }
+
                         removedPieces->append(destination->getCurrentPiece());
                     } else {
                         validMovement = false;
@@ -139,6 +165,22 @@ void ChessTab::movePieceFromSelectedCell(ChessCell *destination)
             }
 
             if (validMovement) {
+                bool isKingWhite = !selectedCell->getCurrentPiece()->getIsWhite();
+                bool isCheck = isKingCheck(!selectedCell->getCurrentPiece()->getIsWhite());
+
+                if (isCheck && isKingCheckmate(!selectedCell->getCurrentPiece()->getIsWhite())) {
+                    QString labelText = "";
+
+                    if (isKingWhite) {
+                        labelText = "The blacks wins !";
+                    } else {
+                        labelText = "The whites wins !";
+                    }
+
+                    QLabel *victoryLabel = new QLabel(labelText);
+                    victoryLabel->show();
+                }
+
                 destination->setPiece(selectedCell->getCurrentPiece());
                 selectedCell->setPiece(NULL);
             } else {
@@ -146,6 +188,8 @@ void ChessTab::movePieceFromSelectedCell(ChessCell *destination)
             }
         }
     }
+
+    return validMovement;
 }
 
 /**
@@ -166,7 +210,13 @@ ChessCell* ChessTab::getCellAt(Position pos) const
  */
 ChessCell* ChessTab::getCellAt(int x, int y) const
 {
-    return cells[y*8 + x];
+    ChessCell *cell = NULL;
+
+    if (y < 8 && y >=0 && x < 8 && x >= 0) {
+        cell = cells[y*8 + x];
+    }
+
+    return cell;
 }
 
 /**
@@ -200,7 +250,7 @@ void ChessTab::resetTab()
     populateTab();
 }
 
-bool ChessTab::isSomeoneInWay(Position start, Position end)
+bool ChessTab::isSomeoneInWay(Position start, Position end, PieceEntity *except)
 {
     bool inWay = false;
 
@@ -231,8 +281,8 @@ bool ChessTab::isSomeoneInWay(Position start, Position end)
             y += direction.y;
         }
 
-        if (getCellAt(x, y)->getCurrentPiece() != NULL) {
-            qDebug() << "Something is on the way";
+        if (getCellAt(x, y)->getCurrentPiece() != NULL && getCellAt(x, y)->getCurrentPiece() != except) {
+            qDebug() << "Something is on the way : " + getCellAt(x, y)->getCurrentPiece()->getName();
             inWay = true;
             break;
         } else if (secureCount > 498) {
@@ -247,6 +297,19 @@ bool ChessTab::isSomeoneInWay(Position start, Position end)
 QList<PieceEntity *>* ChessTab::getRemovedPieces()
 {
     return removedPieces;
+}
+
+QList<PieceEntity *>* ChessTab::getPiecesOfColor(bool white) const
+{
+    QList<PieceEntity *> *list;
+
+    if (white) {
+       list = whitePlayer->getPieces();
+    } else {
+        list = blackPlayer->getPieces();
+    }
+
+    return list;
 }
 
 ChessTab* ChessTab::getLatestInstance()
@@ -278,4 +341,110 @@ bool ChessTab::canEatPiece(PieceEntity *piece)
     }
 
     return canEat;
+}
+
+KingEntity* ChessTab::findKingOfColor(bool white)
+{
+    KingEntity *king = NULL;
+    QList<PieceEntity *> *pieces;
+
+    if (white) {
+        pieces = whitePlayer->getPieces();
+    } else {
+        pieces = blackPlayer->getPieces();
+    }
+
+    for (int i = 0; i < pieces->count(); i++) {
+        king = dynamic_cast<KingEntity *>(pieces->at(i));
+
+        if (king != NULL) {
+            break;
+        }
+    }
+
+    return king;
+}
+
+bool ChessTab::isKingCheck(bool white)
+{
+    qDebug() << "checking check";
+    bool isCheck = false;
+    KingEntity *king = findKingOfColor(white);
+
+    if (king != NULL) {
+        QList<PieceEntity *> *pieces = getPiecesOfColor(!white);
+
+        for (int i = 0; i < pieces->count(); i++) {
+            Position originPos = pieces->at(i)->getPosition();
+
+            if (pieces->at(i)->move(king->getPosition(), king) &&
+                    (!isSomeoneInWay(originPos, king->getPosition(), pieces->at(i)) || !hasToCheckSomeoneInWay(selectedCell->getCurrentPiece()))) {
+                qDebug() << "Check !";
+                isCheck = isCheck || true;
+            }
+
+            pieces->at(i)->setPosition(originPos);
+        }
+    } else {
+        qDebug() << "ERROR : NO KING FOUND !";
+    }
+
+    return isCheck;
+}
+
+bool ChessTab::isKingCheckmate(bool white)
+{
+    qDebug() << "checking checkmate";
+    bool isCheckmate = true;
+    KingEntity *king = findKingOfColor(white);
+    QList<ChessCell *> *toCheck = new QList<ChessCell *>();
+
+    if (king != NULL) {
+        QList<PieceEntity *> *pieces = getPiecesOfColor(!white);
+
+        int countY = -1;
+        for (int y = king->getPosition().y - 1; y <= king->getPosition().y + 1; y++) {
+
+            int countX = -1;
+            for (int x = king->getPosition().x - 1; x <= king->getPosition().x + 1; x++) {
+
+                ChessCell *cell = getCellAt(x, y);
+
+                // Look only for the four cells surrounding the king
+                if (cell != NULL && countX != countY && (countX + countY != 0)) {
+                    toCheck->append(cell);
+
+                    for (int i = 0; i < pieces->count(); i++) {
+                        Position originPos = pieces->at(i)->getPosition();
+                        bool notInWay = (!isSomeoneInWay(originPos, cell->getPosition(), pieces->at(i)) || !hasToCheckSomeoneInWay(selectedCell->getCurrentPiece()));
+                        bool canMoveTo = pieces->at(i)->move(cell->getPosition(), cell->getCurrentPiece());
+
+                        if (cell->getCurrentPiece() != NULL || (canMoveTo && notInWay)) {
+                            isCheckmate = isCheckmate && true;
+                            toCheck->removeOne(cell);
+                        }
+
+                        pieces->at(i)->setPosition(originPos);
+                    }
+
+                    if (toCheck->contains(cell)) {
+                        qDebug() << QString::number(x) + " " + QString::number(y) + " is not taken";
+                        isCheckmate = false;
+                    }
+                }
+
+                countX++;
+            }
+
+            countY++;
+        }
+    } else {
+        qDebug() << "ERROR : NO KING FOUND !";
+    }
+
+    if (isCheckmate) {
+        qDebug() << "CHECKMATE !!!";
+    }
+
+    return isCheckmate;
 }

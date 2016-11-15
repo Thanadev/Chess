@@ -10,6 +10,7 @@ public:
     KingEntity(Position position, bool isWhite);
     ~KingEntity();
     KingPattern* getPattern();
+    QString getName();
 protected:
 };
 

@@ -10,6 +10,7 @@ public:
     RookEntity(Position position, bool isWhite);
     ~RookEntity();
     RookPattern* getPattern();
+    QString getName();
 };
 
 #endif // ROOKENTITY_H

@@ -10,6 +10,7 @@ public:
     BishopEntity(Position position, bool isWhite);
     ~BishopEntity();
     BishopPattern* getPattern();
+    QString getName();
 };
 
 #endif // BISHOPENTITY_H

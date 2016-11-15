@@ -24,3 +24,8 @@ KingPattern* KingEntity::getPattern()
 {
     return dynamic_cast<KingPattern*>(pattern);
 }
+
+QString KingEntity::getName()
+{
+    return "king";
+}

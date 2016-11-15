@@ -10,6 +10,7 @@ public:
     KnightEntity(Position position, bool isWhite);
     ~KnightEntity();
     KnightPattern* getPattern();
+    QString getName();
 };
 
 #endif // KNIGHTENTITY_H

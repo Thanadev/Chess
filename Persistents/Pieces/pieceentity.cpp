@@ -49,3 +49,7 @@ void PieceEntity::setPosition(Position pos)
 {
     position = pos;
 }
+
+QString PieceEntity::getName() {
+    return "Piece";
+}

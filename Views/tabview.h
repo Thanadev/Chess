@@ -5,6 +5,7 @@
 #include <QGridLayout>
 #include <QLabel>
 #include <QList>
+#include <QDebug>
 
 #include "cellview.h"
 #include "../Persistents/chesstab.h"

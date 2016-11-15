@@ -26,6 +26,11 @@ void CellView::initCell()
     QObject::connect(this, SIGNAL(clicked()), this, SLOT(clickedHandler()));
 }
 
+ChessCell* CellView::getModel() const
+{
+    return model;
+}
+
 /**
  * @brief CellView::setModel
  * @param cell

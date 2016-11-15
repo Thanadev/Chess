@@ -10,6 +10,7 @@ public:
     PawnEntity(Position position, bool isWhite);
     ~PawnEntity();
     PawnPattern* getPattern();
+    QString getName();
 };
 
 #endif // PAWNENTITY_H

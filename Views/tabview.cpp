@@ -31,6 +31,7 @@ void TabView::updateView()
 
 void TabView::instantiateTab(const ChessTab *tab)
 {
+    qDebug() << "Instantiating tabView";
     CellView *defaultButton = new CellView("");
 
     for (int y = 0; y < 8; y++) {
@@ -39,6 +40,8 @@ void TabView::instantiateTab(const ChessTab *tab)
             defaultButton->setFixedSize(80, 80);
             defaultButton->setModel(tab->getCellAt(x, y));
             defaultButton->setIconSize(QSize(64, 64));
+            Position pos = defaultButton->getModel()->getPosition();
+            defaultButton->setToolTip(QString::number(pos.x) + "/" + QString::number(pos.y));
 
             cells->append(defaultButton);
             QObject::connect(defaultButton, SIGNAL(clickedWithPosition(Position)), this, SLOT(cellClickedHandler(Position)));

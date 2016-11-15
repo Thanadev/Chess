@@ -15,6 +15,7 @@ public:
     ~CellView();
     void setModel(ChessCell *cell);
     void updateView();
+    ChessCell* getModel() const;
 signals:
     void clickedWithPosition(Position pos);
 private slots:

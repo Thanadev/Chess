@@ -13,9 +13,11 @@ public:
     TabController();
     ~TabController();
     TabView* getView();
+    void setWhitePlayerTurn();
 private slots:
     void cellSelectedHandler(Position pos);
 private:
+    bool whitePlayerTurn;
     TabView *tabView;
     ChessTab *model;
 };

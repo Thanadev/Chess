@@ -14,6 +14,7 @@
 #include "knighttest.h"
 #include "rooktest.h"
 #include "queentest.h"
+#include "playertest.h"
 
 /**
  * @brief Main class executing the tests

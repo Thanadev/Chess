@@ -25,3 +25,7 @@ KnightPattern* KnightEntity::getPattern()
     return dynamic_cast<KnightPattern *>(pattern);
 }
 
+QString KnightEntity::getName()
+{
+    return "knight";
+}
