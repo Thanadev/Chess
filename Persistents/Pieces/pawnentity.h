@@ -11,6 +11,7 @@ public:
     ~PawnEntity();
     PawnPattern* getPattern();
     QString getName();
+    bool move(Position position, PieceEntity *occupant);
 };
 
 #endif // PAWNENTITY_H

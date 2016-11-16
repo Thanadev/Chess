@@ -25,7 +25,7 @@ bool PawnTest::patternValidForwardTest()
     Position destination = pawn->getPosition();
     destination.y++;
 
-    return pawn->getPattern()->checkPattern(pawn->getPosition(), destination);
+    return pawn->getPattern()->checkPattern(pawn->getPosition(), destination, false);
 }
 
 bool PawnTest::patternNonValidBackwardTest()
@@ -33,5 +33,5 @@ bool PawnTest::patternNonValidBackwardTest()
     Position destination = pawn->getPosition();
     destination.y--;
 
-    return !pawn->getPattern()->checkPattern(pawn->getPosition(), destination);
+    return !pawn->getPattern()->checkPattern(pawn->getPosition(), destination, false);
 }

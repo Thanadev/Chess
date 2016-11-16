@@ -15,6 +15,32 @@ PawnEntity::PawnEntity(Position position, bool isWhite) : PieceEntity(position, 
     icon = QIcon(iconPath);
 }
 
+bool PawnEntity::move(Position position, PieceEntity *occupant)
+{
+    bool isOccupatedByEnemy = false;
+    bool isValid = true;
+
+    if (occupant != NULL) {
+        if (occupant->getIsWhite() != isWhite) {
+            isOccupatedByEnemy = true;
+        } else if (occupant->getIsWhite() == this->isWhite) {
+            isValid = false;
+        }
+    }
+
+    PawnPattern *castPattern = dynamic_cast<PawnPattern *>(pattern);
+
+    if (castPattern != NULL) {
+        isValid = isValid && castPattern->checkPattern(this->position, position, isOccupatedByEnemy);
+    }
+
+    if (isValid) {
+        this->position = position;
+    }
+
+    return isValid;
+}
+
 PawnEntity::~PawnEntity()
 {
     delete pattern;

@@ -15,12 +15,13 @@ PawnPattern::~PawnPattern()
  * @param end
  * @return
  */
-bool PawnPattern::checkPattern(Position start, Position end)
+bool PawnPattern::checkPattern(Position start, Position end, bool isOccupatedByEnemy)
 {
     bool isValid = false;
     int direction = getDirection();
 
-    if (((end.y - start.y) == (1 * direction)) && (end.x - start.x) == 0) {
+    if ((((end.y - start.y) == (1 * direction)) && (end.x - start.x) == 0) ||
+            (isOccupatedByEnemy && ((end.y - start.y == end.x - start.x) || (end.y - start.y + end.x - start.x) == 0) && (end.y - start.y == 1 * direction))) {
         isValid = true;
     }
 

@@ -8,7 +8,7 @@ class PawnPattern : public BasePattern
 public:
     PawnPattern(bool headedUp);
     ~PawnPattern();
-    virtual bool checkPattern(Position start, Position end);
+    virtual bool checkPattern(Position start, Position end, bool isOccupatedByEnemy);
 };
 
 #endif // PAWNPATTERN_H
