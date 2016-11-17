@@ -135,7 +135,7 @@ bool ChessTab::movePieceFromSelectedCell(ChessCell *destination)
 
     if (selectedCell != NULL && selectedCell->getCurrentPiece() != NULL) {
 
-        if (selectedCell->getCurrentPiece()->move(destination->getPosition(), destination->getCurrentPiece())) {
+        if (checkKingMovement(selectedCell->getCurrentPiece(), destination->getPosition()) && selectedCell->getCurrentPiece()->move(destination->getPosition(), destination->getCurrentPiece())) {
 
             if (!isSomeoneInWay(selectedCell->getPosition(), destination->getPosition()) ||
                     !hasToCheckSomeoneInWay(selectedCell->getCurrentPiece())) {
@@ -144,7 +144,6 @@ bool ChessTab::movePieceFromSelectedCell(ChessCell *destination)
 
                 // Check piece eating
                 if (destination->getCurrentPiece() != NULL && destination->getCurrentPiece()->getIsWhite() != selectedCell->getCurrentPiece()->getIsWhite()) {
-
 
                     if (canEatPiece(destination->getCurrentPiece())) {
                         qDebug() << "Enemy killed";
@@ -343,12 +342,12 @@ bool ChessTab::canEatPiece(PieceEntity *piece)
     return canEat;
 }
 
-KingEntity* ChessTab::findKingOfColor(bool white)
+KingEntity* ChessTab::findKingOfColor(bool isKingWhite)
 {
     KingEntity *king = NULL;
     QList<PieceEntity *> *pieces;
 
-    if (white) {
+    if (isKingWhite) {
         pieces = whitePlayer->getPieces();
     } else {
         pieces = blackPlayer->getPieces();
@@ -365,14 +364,14 @@ KingEntity* ChessTab::findKingOfColor(bool white)
     return king;
 }
 
-bool ChessTab::isKingCheck(bool white)
+bool ChessTab::isKingCheck(bool isKingWhite)
 {
     qDebug() << "checking check";
     bool isCheck = false;
-    KingEntity *king = findKingOfColor(white);
+    KingEntity *king = findKingOfColor(isKingWhite);
 
     if (king != NULL) {
-        QList<PieceEntity *> *pieces = getPiecesOfColor(!white);
+        QList<PieceEntity *> *pieces = getPiecesOfColor(!isKingWhite);
 
         for (int i = 0; i < pieces->count(); i++) {
             Position originPos = pieces->at(i)->getPosition();
@@ -380,7 +379,7 @@ bool ChessTab::isKingCheck(bool white)
             if (pieces->at(i)->move(king->getPosition(), king) &&
                     (!isSomeoneInWay(originPos, king->getPosition(), pieces->at(i)) || !hasToCheckSomeoneInWay(selectedCell->getCurrentPiece()))) {
                 qDebug() << "Check !";
-                isCheck = isCheck || true;
+                isCheck = true;
             }
 
             pieces->at(i)->setPosition(originPos);
@@ -392,15 +391,37 @@ bool ChessTab::isKingCheck(bool white)
     return isCheck;
 }
 
-bool ChessTab::isKingCheckmate(bool white)
+bool ChessTab::isKingCheck(bool isKingWhite, Position pos)
+{
+    qDebug() << "checking check";
+    bool isCheck = false;
+
+    QList<PieceEntity *> *pieces = getPiecesOfColor(!isKingWhite);
+
+    for (int i = 0; i < pieces->count(); i++) {
+        Position originPos = pieces->at(i)->getPosition();
+
+        if (pieces->at(i)->move(pos, NULL) &&
+                (!isSomeoneInWay(originPos, pos, pieces->at(i)) || !hasToCheckSomeoneInWay(selectedCell->getCurrentPiece()))) {
+            qDebug() << "Check !";
+            isCheck = true;
+        }
+
+        pieces->at(i)->setPosition(originPos);
+    }
+
+    return isCheck;
+}
+
+bool ChessTab::isKingCheckmate(bool isKingWhite)
 {
     qDebug() << "checking checkmate";
     bool isCheckmate = true;
-    KingEntity *king = findKingOfColor(white);
+    KingEntity *king = findKingOfColor(isKingWhite);
     QList<ChessCell *> *toCheck = new QList<ChessCell *>();
 
     if (king != NULL) {
-        QList<PieceEntity *> *pieces = getPiecesOfColor(!white);
+        QList<PieceEntity *> *pieces = getPiecesOfColor(!isKingWhite);
 
         int countY = -1;
         for (int y = king->getPosition().y - 1; y <= king->getPosition().y + 1; y++) {
@@ -447,4 +468,17 @@ bool ChessTab::isKingCheckmate(bool white)
     }
 
     return isCheckmate;
+}
+
+bool ChessTab::checkKingMovement(PieceEntity *piece, Position pos)
+{
+    bool isValid = false;
+
+    KingEntity *king = dynamic_cast<KingEntity *>(piece);
+
+    if (king == NULL || (king != NULL && !isKingCheck(piece->getIsWhite(), pos))) {
+        isValid = true;
+    }
+
+    return isValid;
 }

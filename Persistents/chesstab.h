@@ -38,9 +38,11 @@ protected:
     bool movePieceFromSelectedCell(ChessCell* destination);
     bool hasToCheckSomeoneInWay(PieceEntity *piece);
     bool canEatPiece(PieceEntity *piece);
-    bool isKingCheck(bool white);
-    bool isKingCheckmate(bool white);
-    KingEntity* findKingOfColor(bool white);
+    bool isKingCheck(bool isKingWhite);
+    bool isKingCheck(bool isKingWhite, Position pos);
+    bool isKingCheckmate(bool isKingWhite);
+    bool checkKingMovement(PieceEntity *piece, Position pos);
+    KingEntity* findKingOfColor(bool isKingWhite);
 
     static ChessTab *latestInstance;
     ChessCell *cells[64];
